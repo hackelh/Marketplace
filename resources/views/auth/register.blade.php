@@ -20,6 +20,16 @@
             </div>
 
             <div class="mt-4">
+                <x-label for="role" value="{{ __('Type de compte') }}" />
+                <select id="role" name="role" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
+                    <option value="">{{ __('Choisissez votre type de compte') }}</option>
+                    <option value="client" {{ old('role') == 'client' ? 'selected' : '' }}>{{ __('Client') }}</option>
+                    <option value="vendeur" {{ old('role') == 'vendeur' ? 'selected' : '' }}>{{ __('Vendeur de tissus') }}</option>
+                    <option value="tailleur" {{ old('role') == 'tailleur' ? 'selected' : '' }}>{{ __('Tailleur') }}</option>
+                </select>
+            </div>
+
+            <div class="mt-4">
                 <x-label for="password" value="{{ __('Password') }}" />
                 <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
             </div>
