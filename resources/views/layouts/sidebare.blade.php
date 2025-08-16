@@ -190,12 +190,6 @@
                 </ul>
               </li>
               <li class="nav-item">
-                <a href="{{ route('vendeur.tissus') }}" class="nav-link {{ request()->routeIs('vendeur.tissus') ? 'active' : '' }}">
-                  <i class="nav-icon bi bi-box"></i>
-                  <p>Catalogue</p>
-                </a>
-              </li>
-              <li class="nav-item">
                 <a href="{{ route('vendeur.gestion-tissus', false) ?? '#' }}" class="nav-link {{ request()->routeIs('vendeur.gestion-tissus') ? 'active' : '' }}">
                   <i class="nav-icon bi bi-gear"></i>
                   <p>Gestion des Tissus</p>

@@ -46,13 +46,6 @@ Route::middleware([
         return view('livewire.pages.vendeur.dashboard');
     })->name('vendeur.dashboard');
     
-    Route::get('/vendeur/tissus', function () {
-        // Vérifier que l'utilisateur est bien vendeur
-        if (!auth()->user()->isVendeur()) {
-            abort(403, 'Accès non autorisé');
-        }
-        return view('livewire.pages.vendeur.catalogue');
-    })->name('vendeur.tissus');
     
     Route::get('/vendeur/categories', function () {
         // Vérifier que l'utilisateur est bien vendeur
@@ -103,7 +96,7 @@ Route::middleware([
         // Création du tissu
         \App\Models\Tissu::create($validated);
         
-        return redirect()->route('vendeur.tissus')->with('success', 'Tissu ajouté avec succès !');
+        return redirect()->route('vendeur.gestion-tissus')->with('success', 'Tissu ajouté avec succès !');
     })->name('vendeur.ajouter-tissu.store');
     
     Route::get('/vendeur/pays', function () {
