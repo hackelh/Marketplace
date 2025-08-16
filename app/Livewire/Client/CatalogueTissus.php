@@ -8,6 +8,6 @@ class CatalogueTissus extends Component
 {
     public function render()
     {
-        return view('livewire.client.catalogue-tissus');
+        return view('livewire.components.client.catalogue');
     }
 }

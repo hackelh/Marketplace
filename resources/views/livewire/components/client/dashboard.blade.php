@@ -34,7 +34,7 @@
                         </div>
 
                         <p class="mt-4 text-gray-500 text-sm leading-relaxed">
-                            Parcourez notre sélection de tissus de qualité proposés par nos vendeurs.
+                            Parcourez notre sélection de tissus de qualité proposés par nos vendeurs. <a href="{{ route('client.catalogue') }}" class="text-indigo-600 hover:text-indigo-800 underline">Accéder au catalogue</a>
                         </p>
                     </div>
 
