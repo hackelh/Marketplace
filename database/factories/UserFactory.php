@@ -31,6 +31,7 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'role' => 'client', // Rôle par défaut
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
@@ -42,10 +43,53 @@ class UserFactory extends Factory
     /**
      * Indicate that the model's email address should be unverified.
      */
+    /**
+     * Indicate that the model's email address should be unverified.
+     */
     public function unverified(): static
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+    
+    /**
+     * Indique que l'utilisateur est un administrateur.
+     */
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'admin',
+        ]);
+    }
+    
+    /**
+     * Indique que l'utilisateur est un vendeur.
+     */
+    public function vendeur(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'vendeur',
+        ]);
+    }
+    
+    /**
+     * Indique que l'utilisateur est un tailleur.
+     */
+    public function tailleur(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'tailleur',
+        ]);
+    }
+    
+    /**
+     * Indique que l'utilisateur est un client.
+     */
+    public function client(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'client',
         ]);
     }
 

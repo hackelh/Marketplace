@@ -29,13 +29,20 @@ return [
     */
 
     'disks' => [
-
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
             'serve' => true,
             'throw' => false,
             'report' => false,
+        ],
+        
+        'tissus' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/tissus'),
+            'url' => env('APP_URL').'/storage/tissus',
+            'visibility' => 'public',
+            'throw' => false,
         ],
 
         'public' => [

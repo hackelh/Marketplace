@@ -1,0 +1,266 @@
+{{-- Backup de l'ancienne version avant remplacement --}}
+<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- En-tête avec fil d'Ariane et titre -->
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="/" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-indigo-600">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                        </svg>
+                        Accueil
+                    </a>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">Mes commandes</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-gray-900">Mes commandes</h1>
+            <p class="mt-1 text-sm text-gray-500">Consultez l'état de vos commandes passées</p>
+        </div>
+
+        <!-- Filtres et recherche -->
+        <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+            <!-- Filtre par statut -->
+            <div class="w-full sm:w-auto">
+                <div class="flex rounded-md shadow-sm">
+                    <button type="button" class="px-4 py-2 text-sm font-medium rounded-l-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                        Toutes
+                    </button>
+                    <button type="button" class="-ml-px px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                        En attente
+                    </button>
+                    <button type="button" class="-ml-px px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                        En cours
+                    </button>
+                    <button type="button" class="-ml-px px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                        Expédiées
+                    </button>
+                    <button type="button" class="-ml-px px-4 py-2 text-sm font-medium rounded-r-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                        Livrées
+                    </button>
+                </div>
+            </div>
+
+            <!-- Barre de recherche -->
+            <div class="relative w-full sm:w-64">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <input type="text" wire:model.debounce.300ms="search" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 sm:text-sm" placeholder="Rechercher une commande...">
+            </div>
+        </div>
+
+        @if($commandes->isEmpty())
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-12 sm:px-6 text-center">
+                    <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    <h3 class="mt-2 text-sm font-medium text-gray-900">Aucune commande</h3>
+                    <p class="mt-1 text-sm text-gray-500">Vous n'avez pas encore passé de commande.</p>
+                    <div class="mt-6">
+                        <a href="{{ route('catalogue') }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                            </svg>
+                            Découvrir nos produits
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @else
+            <div class="bg-white shadow overflow-hidden sm:rounded-lg border border-gray-200">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <span>Référence</span>
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <span>Date</span>
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <span>Statut</span>
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <div class="flex items-center">
+                                        <span>Produits</span>
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                                    <div class="flex items-center justify-end">
+                                        <span>Total</span>
+                                    </div>
+                                </th>
+                                <th scope="col" class="relative px-6 py-3">
+                                    <span class="sr-only">Actions</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @foreach($commandes as $commande)
+                                <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10 flex items-center justify-center bg-indigo-50 rounded-md">
+                                                <svg class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                                </svg>
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">
+                                                    #{{ $commande->reference }}
+                                                </div>
+                                                <div class="text-sm text-gray-500">
+                                                    {{ $commande->items->count() }} article(s)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">
+                                            {{ $commande->created_at->format('d/m/Y') }}
+                                        </div>
+                                        <div class="text-sm text-gray-500">
+                                            {{ $commande->created_at->format('H:i') }}
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        @php
+                                            $statusClasses = [
+                                                'en_attente' => 'bg-yellow-100 text-yellow-800',
+                                                'en_cours' => 'bg-blue-100 text-blue-800',
+                                                'expediee' => 'bg-indigo-100 text-indigo-800',
+                                                'livree' => 'bg-green-100 text-green-800',
+                                                'annulee' => 'bg-red-100 text-red-800',
+                                            ][$commande->statut] ?? 'bg-gray-100 text-gray-800';
+                                        @endphp
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusClasses }}">
+                                            {{ ucfirst($commande->statut) }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex -space-x-2">
+                                            @foreach($commande->items->take(3) as $item)
+                                                <img class="h-10 w-10 rounded-full border-2 border-white" src="{{ $item->tissu->images->first() ? asset('storage/' . $item->tissu->images->first()->path) : asset('images/placeholder.jpg') }}" alt="{{ $item->tissu->nom }}">
+                                            @endforeach
+                                            @if($commande->items->count() > 3)
+                                                <span class="flex items-center justify-center h-10 w-10 rounded-full bg-gray-100 border-2 border-white text-xs font-medium text-gray-600">
+                                                    +{{ $commande->items->count() - 3 }}
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <span class="text-gray-900">{{ number_format($commande->total, 0, ',', ' ') }} FCFA</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <div class="flex items-center justify-end space-x-3">
+                                            <a href="{{ route('commandes.show', $commande->reference) }}" 
+                                               class="text-indigo-600 hover:text-indigo-900 focus:outline-none"
+                                               title="Voir les détails">
+                                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                </svg>
+                                            </a>
+                                            @if($commande->peutEtreAnnulee())
+                                                <button wire:click="annuler('{{ $commande->reference }}')
+                                                        wire:loading.attr="disabled"
+                                                        wire:target="annuler('{{ $commande->reference }}')"
+                                                        class="text-red-600 hover:text-red-900 focus:outline-none"
+                                                        title="Annuler la commande">
+                                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                    </svg>
+                                                </button>
+                                            @endif
+                                            @if($commande->statut === 'expediee')
+                                                <button wire:click="marquerCommeRecue('{{ $commande->reference }}')
+                                                        wire:loading.attr="disabled"
+                                                        wire:target="marquerCommeRecue('{{ $commande->reference }}')"
+                                                        class="text-green-600 hover:text-green-900 focus:outline-none"
+                                                        title="Marquer comme reçue">
+                                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                </button>
+                                            @endif
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="bg-gray-50 px-6 py-3 border-t border-gray-200">
+                    <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+                        <div class="text-sm text-gray-700">
+                            Affichage de <span class="font-medium">{{ $commandes->firstItem() }}</span> à <span class="font-medium">{{ $commandes->lastItem() }}</span> sur <span class="font-medium">{{ $commandes->total() }}</span> résultats
+                        </div>
+                        <div class="flex-1 flex justify-between sm:justify-end space-x-3">
+                            @if($commandes->onFirstPage())
+                                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-300 bg-white cursor-not-allowed">
+                                    Précédent
+                                </span>
+                            @else
+                                <button wire:click="previousPage" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Précédent
+                                </button>
+                            @endif
+                            
+                            @if($commandes->hasMorePages())
+                                <button wire:click="nextPage" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Suivant
+                                </button>
+                            @else
+                                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-300 bg-white cursor-not-allowed">
+                                    Suivant
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+    </div>
+</div>
+
+@push('scripts')
+<script>
+    document.addEventListener('livewire:load', function () {
+        Livewire.on('notify', data => {
+            // Gestion des notifications via un système de toasts
+            const toast = document.createElement('div');
+            toast.className = `fixed top-4 right-4 p-4 rounded-md shadow-lg text-white ${data.type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+            toast.textContent = data.message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 5000);
+        });
+    });
+</script>
+@endpush
