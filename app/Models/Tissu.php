@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
+use App\Traits\HasHistorique;
 
 class Tissu extends Model
 {
-    use HasFactory;
+    use HasFactory, HasHistorique;
 
     /**
      * Les attributs qui peuvent être assignés en masse
@@ -51,6 +53,14 @@ class Tissu extends Model
     public function vendeur(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Un tissu a plusieurs entrées d'historique
+     */
+    public function historique(): HasMany
+    {
+        return $this->hasMany(HistoriqueTissu::class);
     }
 
     /**

@@ -3,6 +3,7 @@
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Laravel') }} - @yield('title', 'Dashboard')</title>
     <!--begin::Accessibility Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
@@ -42,6 +43,8 @@
     <link rel="stylesheet" href="/AdminLTE-4.0.0-rc4/dist/css/adminlte.css" />
     <!--end::Required Plugin(AdminLTE)-->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
+    @stack('styles')
   </head>
   <!--end::Head-->
   <!--begin::Body-->
@@ -59,7 +62,7 @@
                 <i class="bi bi-list"></i>
               </a>
             </li>
-            <li class="nav-item d-none d-md-block"><a href="{{ route('vendeur.dashboard') }}" class="nav-link">Accueil</a></li>
+            <li class="nav-item d-none d-md-block"><a href="{{ route('admin.dashboard') }}" class="nav-link">Accueil</a></li>
           </ul>
           <!--end::Start Navbar Links-->
           <!--begin::End Navbar Links-->
@@ -75,7 +78,7 @@
                 <li class="user-header text-bg-primary">
                   <i class="bi bi-person-circle fs-1"></i>
                   <p>
-                    {{ auth()->user()->name }} - Vendeur
+                    {{ auth()->user()->name }} - Admin
                     <small>Membre depuis {{ auth()->user()->created_at->format('M. Y') }}</small>
                   </p>
                 </li>
@@ -102,7 +105,7 @@
         <!--begin::Sidebar Brand-->
         <div class="sidebar-brand">
           <!--begin::Brand Link-->
-          <a href="{{ route('vendeur.dashboard') }}" class="brand-link">
+          <a href="{{ route('admin.dashboard') }}" class="brand-link">
             <!--begin::Brand Image-->
             <img
               src="/AdminLTE-4.0.0-rc4/dist/assets/img/AdminLTELogo.png"
@@ -111,7 +114,7 @@
             />
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <span class="brand-text fw-light">Marketplace</span>
+            <span class="brand-text fw-light">Marketplace Admin</span>
             <!--end::Brand Text-->
           </a>
           <!--end::Brand Link-->
@@ -130,79 +133,41 @@
               id="navigation"
             >
               <li class="nav-item">
-                <a href="{{ route('vendeur.dashboard') }}" class="nav-link {{ request()->routeIs('vendeur.dashboard') ? 'active' : '' }}">
+                <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                   <i class="nav-icon bi bi-speedometer"></i>
                   <p>Dashboard</p>
                 </a>
               </li>
-              <li class="nav-item {{ request()->routeIs(['vendeur.categories','vendeur.pays','vendeur.couleurs']) ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ request()->routeIs(['vendeur.categories','vendeur.pays','vendeur.couleurs']) ? 'active' : '' }}">
-                  <i class="fa-solid fa-list"></i>
-                  <p>
-                    Paramétrage
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="{{ route('vendeur.categories') }}" class="nav-link {{ request()->routeIs('vendeur.categories') ? 'active' : '' }}">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Gestion Catégories</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ route('vendeur.pays', false) ?? '#' }}" class="nav-link {{ request()->routeIs('vendeur.pays') ? 'active' : '' }}">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Pays d'Origine</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ route('vendeur.couleurs', false) ?? '#' }}" class="nav-link {{ request()->routeIs('vendeur.couleurs') ? 'active' : '' }}">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Couleur Tissu</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <!-- Menu Commande -->
-              <li class="nav-item {{ request()->routeIs(['vendeur.commandes.en-cours','vendeur.commandes.valide']) ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ request()->routeIs(['vendeur.commandes.en-cours','vendeur.commandes.valide']) ? 'active' : '' }}">
-                  <i class="bi bi-bag"></i>
-                  <p>
-                    Commande
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="{{ route('vendeur.commandes.en-cours', false) ?? '#' }}" class="nav-link {{ request()->routeIs('vendeur.commandes.en-cours') ? 'active' : '' }}">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Commandes en cours</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ route('vendeur.commandes.valide', false) ?? '#' }}" class="nav-link {{ request()->routeIs('vendeur.commandes.valide') ? 'active' : '' }}">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Commandes validées</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
               <li class="nav-item">
-                <a href="{{ route('vendeur.gestion-tissus', false) ?? '#' }}" class="nav-link {{ request()->routeIs('vendeur.gestion-tissus') ? 'active' : '' }}">
-                  <i class="nav-icon bi bi-gear"></i>
-                  <p>Gestion des Tissus</p>
+                <a href="{{ route('admin.utilisateurs', false) ?? '#' }}" class="nav-link {{ request()->routeIs('admin.utilisateurs') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-people"></i>
+                  <p>Utilisateurs</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('vendeur.statistiques', false) ?? '#' }}" class="nav-link {{ request()->routeIs('vendeur.statistiques') ? 'active' : '' }}">
+                <a href="{{ route('admin.categories', false) ?? '#' }}" class="nav-link {{ request()->routeIs('admin.categories') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-tags"></i>
+                  <p>Catégories</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.tissus', false) ?? '#' }}" class="nav-link {{ request()->routeIs('admin.tissus') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-box"></i>
+                  <p>Tissus</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.commandes', false) ?? '#' }}" class="nav-link {{ request()->routeIs('admin.commandes') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-bag"></i>
+                  <p>Commandes</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.statistiques', false) ?? '#' }}" class="nav-link {{ request()->routeIs('admin.statistiques') ? 'active' : '' }}">
                   <i class="nav-icon bi bi-graph-up"></i>
                   <p>Statistiques</p>
                 </a>
               </li>
-
             </ul>
             <!--end::Sidebar Menu-->
 
@@ -235,7 +200,7 @@
               </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="{{ route('vendeur.dashboard') }}">Accueil</a></li>
+                  <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Accueil</a></li>
                   <li class="breadcrumb-item active" aria-current="page">@yield('breadcrumb', 'Dashboard')</li>
                 </ol>
               </div>
@@ -254,9 +219,14 @@
       <!--end::App Content-->
     </div>
     <!--end::App Wrapper-->
+    <!--begin::Vendor Scripts (required before AdminLTE)-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+    <!--end::Vendor Scripts-->
     <!--begin::Required Plugin(AdminLTE)-->
     <script src="/AdminLTE-4.0.0-rc4/dist/js/adminlte.js"></script>
     <!--end::Required Plugin(AdminLTE)-->
+    @livewireScripts
     @stack('scripts')
     
     <!-- Hot Reload pour le développement -->

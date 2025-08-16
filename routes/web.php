@@ -11,6 +11,8 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+
+
     // Route principale qui redirige selon le rôle
     Route::get('/dashboard', function () {
         $user = auth()->user();
@@ -37,6 +39,36 @@ Route::middleware([
         }
         return view('livewire.pages.admin.dashboard');
     })->name('admin.dashboard');
+
+    // Routes Admin placeholders (à remplacer par vos pages réelles)
+    Route::get('/admin/utilisateurs', function () {
+        abort_unless(auth()->user()->isAdmin(), 403);
+        return view('livewire.pages.admin.utilisateurs');
+    })->name('admin.utilisateurs');
+
+    Route::get('/admin/categories', function () {
+        abort_unless(auth()->user()->isAdmin(), 403);
+        return view('livewire.pages.admin.categories')
+            ->with('title', 'Catégories');
+    })->name('admin.categories');
+
+    Route::get('/admin/tissus', function () {
+        abort_unless(auth()->user()->isAdmin(), 403);
+        return view('livewire.pages.admin.tissus')
+            ->with('title', 'Tissus');
+    })->name('admin.tissus');
+
+    Route::get('/admin/commandes', function () {
+        abort_unless(auth()->user()->isAdmin(), 403);
+        return view('livewire.pages.admin.commandes')
+            ->with('title', 'Commandes');
+    })->name('admin.commandes');
+
+    Route::get('/admin/statistiques', function () {
+        abort_unless(auth()->user()->isAdmin(), 403);
+        return view('livewire.pages.admin.statistiques')
+            ->with('title', 'Statistiques');
+    })->name('admin.statistiques');
     
     Route::get('/vendeur/dashboard', function () {
         // Vérifier que l'utilisateur est bien vendeur
@@ -46,14 +78,7 @@ Route::middleware([
         return view('livewire.pages.vendeur.dashboard');
     })->name('vendeur.dashboard');
     
-    Route::get('/vendeur/tissus', function () {
-        // Vérifier que l'utilisateur est bien vendeur
-        if (!auth()->user()->isVendeur()) {
-            abort(403, 'Accès non autorisé');
-        }
-        return view('livewire.pages.vendeur.catalogue');
-    })->name('vendeur.tissus');
-    
+
     Route::get('/vendeur/categories', function () {
         // Vérifier que l'utilisateur est bien vendeur
         if (!auth()->user()->isVendeur()) {
@@ -103,7 +128,7 @@ Route::middleware([
         // Création du tissu
         \App\Models\Tissu::create($validated);
         
-        return redirect()->route('vendeur.tissus')->with('success', 'Tissu ajouté avec succès !');
+        return redirect()->route('vendeur.gestion-tissus')->with('success', 'Tissu ajouté avec succès !');
     })->name('vendeur.ajouter-tissu.store');
     
     Route::get('/vendeur/pays', function () {
@@ -229,10 +254,18 @@ Route::middleware([
         ]);
         
         $tissu = \App\Models\Tissu::where('user_id', auth()->id())->findOrFail($id);
-        $tissu->increment('stock', $validated['metre_ajout']);
+        $tissu->ajouterStock($validated['metre_ajout'], 'Ajout manuel', null, 'Ajout via interface vendeur');
         
         return redirect()->route('vendeur.gestion-tissus')->with('success', $validated['metre_ajout'] . ' mètres ajoutés au stock !');
     })->name('vendeur.tissu.add-metres');
+
+    Route::get('/vendeur/tissu/{id}/historique', function ($id) {
+        if (!auth()->user()->isVendeur()) {
+            abort(403, 'Accès non autorisé');
+        }
+        
+        return view('livewire.pages.vendeur.historique-tissu', ['tissuId' => $id]);
+    })->name('vendeur.historique-tissu');
     
     Route::get('/vendeur/commandes/en-cours', function () {
         if (!auth()->user()->isVendeur()) {

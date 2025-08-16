@@ -1,7 +1,9 @@
-@extends('layouts.sidebare')
+@extends('layouts.adminlte')
 
 @section('title', 'Gestion des Tissus')
-@section('breadcrumb', 'Gestion des Tissus')
+@section('breadcrumb')
+    <li class="breadcrumb-item active">Gestion des Tissus</li>
+@endsection
 
 @section('content')
 <div class="container-fluid">
@@ -181,6 +183,9 @@
                                             <button type="button" class="btn btn-sm btn-secondary" title="Ajouter des métrages" onclick="openMetreModal({{ $tissu->id }}, '{{ $tissu->nom }}')">
                                                 <i class="bi bi-plus-circle"></i> Mètres
                                             </button>
+                                            <a href="{{ route('vendeur.historique-tissu', $tissu->id) }}" class="btn btn-sm btn-info" title="Voir l'historique">
+                                                <i class="bi bi-clock-history"></i> Historique
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>
@@ -211,7 +216,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="metreModalLabel">Ajouter des métrages</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" onclick="closeMetreModal()" aria-label="Close"></button>
                 </div>
                 <form id="addMetreForm" method="POST" action="">
                     @csrf
@@ -227,7 +232,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeMetreModal()">Annuler</button>
                         <button type="submit" class="btn btn-primary">Ajouter</button>
                     </div>
                 </form>
@@ -328,8 +333,35 @@ function openMetreModal(id, nom) {
     const form = document.getElementById('addMetreForm');
     form.action = '{{ route("vendeur.tissu.add-metres", ":id") }}'.replace(':id', id);
     
-    var metreModal = new bootstrap.Modal(document.getElementById('metreModal'));
-    metreModal.show();
+    // Utiliser jQuery si disponible, sinon vanilla JS
+    if (typeof $ !== 'undefined') {
+        $('#metreModal').modal('show');
+    } else if (typeof bootstrap !== 'undefined') {
+        var metreModal = new bootstrap.Modal(document.getElementById('metreModal'));
+        metreModal.show();
+    } else {
+        // Fallback vanilla JS
+        document.getElementById('metreModal').style.display = 'block';
+        document.getElementById('metreModal').classList.add('show');
+        document.body.classList.add('modal-open');
+    }
+}
+
+function closeMetreModal() {
+    // Utiliser jQuery si disponible, sinon vanilla JS
+    if (typeof $ !== 'undefined') {
+        $('#metreModal').modal('hide');
+    } else if (typeof bootstrap !== 'undefined') {
+        var metreModal = bootstrap.Modal.getInstance(document.getElementById('metreModal'));
+        if (metreModal) {
+            metreModal.hide();
+        }
+    } else {
+        // Fallback vanilla JS
+        document.getElementById('metreModal').style.display = 'none';
+        document.getElementById('metreModal').classList.remove('show');
+        document.body.classList.remove('modal-open');
+    }
 }
 </script>
 @endsection 

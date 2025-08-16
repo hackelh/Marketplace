@@ -1,8 +1,10 @@
-@extends('layouts.sidebare')
+@extends('layouts.adminlte')
 
 @section('title', 'Commandes validées')
-@section('breadcrumb', 'Commandes validées')
+@section('breadcrumb')
+    <li class="breadcrumb-item active">Commandes validées</li>
+@endsection
 
 @section('content')
-<div class="alert alert-success mt-4">Aucune commande validée pour le moment.</div>
+    @livewire('vendeur.commandes-validees')
 @endsection

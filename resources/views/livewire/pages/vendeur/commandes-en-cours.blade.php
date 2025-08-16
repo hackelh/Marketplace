@@ -1,8 +1,10 @@
-@extends('layouts.sidebare')
+@extends('layouts.adminlte')
 
 @section('title', 'Commandes en cours')
-@section('breadcrumb', 'Commandes en cours')
+@section('breadcrumb')
+    <li class="breadcrumb-item active">Commandes en cours</li>
+@endsection
 
 @section('content')
-<div class="alert alert-info mt-4">Aucune commande en cours pour le moment.</div>
+    @livewire('vendeur.commandes-en-cours')
 @endsection

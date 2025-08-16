@@ -1,7 +1,9 @@
-@extends('layouts.sidebare')
+@extends('layouts.adminlte')
 
 @section('title', 'Dashboard Vendeur')
-@section('breadcrumb', 'Dashboard')
+@section('breadcrumb')
+    <li class="breadcrumb-item active">Dashboard</li>
+@endsection
 
 @section('content')
 <div class="container-fluid py-3">
@@ -17,6 +19,32 @@
             </div>
         </div>
     </div>
+
+    <!-- Alerte des nouvelles commandes -->
+    @php
+        $nouvellesCommandes = \App\Models\Commande::where('vendeur_id', auth()->id())
+            ->where('statut', 'en_attente')
+            ->where('created_at', '>=', now()->subDays(7))
+            ->count();
+    @endphp
+    
+    @if($nouvellesCommandes > 0)
+    <div class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+            <div>
+                <strong>Nouvelles commandes !</strong>
+                <span class="ms-2">Vous avez {{ $nouvellesCommandes }} nouvelle(s) commande(s) en attente de traitement.</span>
+                <div class="mt-1">
+                    <a href="{{ route('vendeur.commandes.en-cours') }}" class="btn btn-sm btn-warning">
+                        <i class="bi bi-eye"></i> Voir les commandes
+                    </a>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
 
     <!-- Statistiques Cards -->
     <div class="row g-4 mb-4">
@@ -68,6 +96,19 @@
                     <div>
                         <div class="fs-5 fw-bold">{{ \App\Models\Tissu::where('user_id', auth()->id())->where('stock', 0)->count() }}</div>
                         <div class="text-muted">Ruptures</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card shadow-sm border-0 h-100 animate__animated animate__fadeInUp animate__delay-4s">
+                <div class="card-body d-flex align-items-center">
+                    <div class="bg-warning bg-opacity-10 rounded-circle p-3 me-3">
+                        <i class="bi bi-bag fs-3 text-warning"></i>
+                    </div>
+                    <div>
+                        <div class="fs-5 fw-bold">{{ \App\Models\Commande::where('vendeur_id', auth()->id())->where('statut', 'en_attente')->count() }}</div>
+                        <div class="text-muted">Commandes en attente</div>
                     </div>
                 </div>
             </div>
