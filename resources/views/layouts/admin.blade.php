@@ -135,6 +135,36 @@
                   <p>Dashboard</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.utilisateurs') }}" class="nav-link {{ request()->routeIs('admin.utilisateurs') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-people"></i>
+                  <p>Utilisateurs</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.categories') }}" class="nav-link {{ request()->routeIs('admin.categories') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-tags"></i>
+                  <p>Catégories</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.tissus') }}" class="nav-link {{ request()->routeIs('admin.tissus') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-box"></i>
+                  <p>Tissus</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.commandes') }}" class="nav-link {{ request()->routeIs('admin.commandes') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-bag"></i>
+                  <p>Commandes</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.statistiques') }}" class="nav-link {{ request()->routeIs('admin.statistiques') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-graph-up"></i>
+                  <p>Statistiques</p>
+                </a>
+              </li>
             </ul>
             <!--end::Sidebar Menu-->
 
