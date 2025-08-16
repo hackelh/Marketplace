@@ -256,4 +256,11 @@ Route::middleware([
         }
         return view('livewire.pages.client.dashboard');
     })->name('client.dashboard');
+
+    Route::get('/client/catalogue', function () {
+        if (!auth()->user()->isClient()) {
+            abort(403, 'Accès non autorisé');
+        }
+        return view('livewire.pages.client.catalogue');
+    })->name('client.catalogue');
 });
