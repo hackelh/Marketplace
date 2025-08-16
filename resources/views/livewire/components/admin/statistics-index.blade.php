@@ -1,4 +1,46 @@
 <div>
+  <div class="row g-3 mb-1">
+    <div class="col-6 col-lg-3">
+      <div class="small-box bg-info">
+        <div class="inner">
+          <h3>{{ $usersByRole['client'] ?? 0 }}</h3>
+          <p>Clients</p>
+        </div>
+        <div class="icon"><i class="bi bi-person"></i></div>
+        <a href="{{ route('admin.utilisateurs') }}?role=client" class="small-box-footer">Voir plus <i class="bi bi-arrow-right"></i></a>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="small-box bg-primary">
+        <div class="inner">
+          <h3>{{ $usersByRole['vendeur'] ?? 0 }}</h3>
+          <p>Vendeurs</p>
+        </div>
+        <div class="icon"><i class="bi bi-shop"></i></div>
+        <a href="{{ route('admin.utilisateurs') }}?role=vendeur" class="small-box-footer">Voir plus <i class="bi bi-arrow-right"></i></a>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="small-box bg-warning">
+        <div class="inner">
+          <h3>{{ $usersByRole['tailleur'] ?? 0 }}</h3>
+          <p>Tailleurs</p>
+        </div>
+        <div class="icon"><i class="bi bi-scissors"></i></div>
+        <a href="{{ route('admin.utilisateurs') }}?role=tailleur" class="small-box-footer">Voir plus <i class="bi bi-arrow-right"></i></a>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="small-box bg-secondary">
+        <div class="inner">
+          <h3>{{ $usersByRole['admin'] ?? 0 }}</h3>
+          <p>Admins</p>
+        </div>
+        <div class="icon"><i class="bi bi-shield-lock"></i></div>
+        <a href="{{ route('admin.utilisateurs') }}?role=admin" class="small-box-footer">Voir plus <i class="bi bi-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
   <div class="row g-3">
     <div class="col-lg-6">
       <div class="card h-100">

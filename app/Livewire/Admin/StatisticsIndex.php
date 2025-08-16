@@ -15,6 +15,7 @@ class StatisticsIndex extends Component
     public array $monthlyRevenue = [];
     public array $topVendors = [];
     public array $categoriesDistribution = [];
+    public array $usersByRole = [];
 
     public function mount(): void
     {
@@ -38,7 +39,7 @@ class StatisticsIndex extends Component
             ->orderBy('ym', 'desc')
             ->limit(6)
             ->get()
-            ->reverse() // pour afficher du plus ancien au plus récent
+            ->reverse()
             ->map(fn($r) => ['ym' => $r->ym, 'total' => (float) $r->total])
             ->values()
             ->all();
@@ -73,6 +74,20 @@ class StatisticsIndex extends Component
                 'tissus_count' => (int) $c->tissus_count,
             ])
             ->all();
+
+        // Utilisateurs par rôle
+        $roles = User::query()
+            ->select('role', DB::raw('COUNT(*) as total'))
+            ->groupBy('role')
+            ->pluck('total', 'role')
+            ->toArray();
+
+        $this->usersByRole = [
+            'admin' => (int)($roles['admin'] ?? 0),
+            'vendeur' => (int)($roles['vendeur'] ?? 0),
+            'tailleur' => (int)($roles['tailleur'] ?? 0),
+            'client' => (int)($roles['client'] ?? 0),
+        ];
     }
 
     public function render()
@@ -84,6 +99,7 @@ class StatisticsIndex extends Component
             'monthlyRevenue' => $this->monthlyRevenue,
             'topVendors' => $this->topVendors,
             'categoriesDistribution' => $this->categoriesDistribution,
+            'usersByRole' => $this->usersByRole,
         ]);
     }
 }
