@@ -34,16 +34,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="couleur" class="form-label">Couleur *</label>
-                                            <input type="text" class="form-control @error('couleur') is-invalid @enderror" 
-                                                   id="couleur" name="couleur" value="{{ old('couleur', $tissu->couleur) }}" required>
-                                            @error('couleur')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
+                                    
                                 </div>
 
                                 <div class="row">
@@ -69,6 +60,8 @@
                                     </div>
                                 </div>
 
+
+
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
@@ -90,9 +83,15 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="origine" class="form-label">Origine</label>
-                                            <input type="text" class="form-control @error('origine') is-invalid @enderror" 
-                                                   id="origine" name="origine" value="{{ old('origine', $tissu->origine) }}">
+                                            <label for="origine" class="form-label">Origine (pays)</label>
+                                            @php($paysList = \App\Models\Pays::orderBy('nom')->get())
+                                            @php($currentOrigine = old('origine', $tissu->origine))
+                                            <select class="form-select @error('origine') is-invalid @enderror" id="origine" name="origine">
+                                                <option value="">Sélectionnez un pays</option>
+                                                @foreach($paysList as $p)
+                                                    <option value="{{ $p->nom }}" {{ $currentOrigine === $p->nom ? 'selected' : '' }}>{{ $p->nom }}</option>
+                                                @endforeach
+                                            </select>
                                             @error('origine')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -161,4 +160,23 @@
         </div>
     </div>
 </div>
+
+<script>
+function toggleCustomColorEdit(val){
+  const preset = ['Bleu','Rouge','Vert','Jaune','Noir','Blanc'];
+  const select = document.getElementById('couleur-select');
+  const custom = document.getElementById('custom-couleur');
+  if(val === 'Autre'){
+    custom.style.display = '';
+    custom.name = 'couleur';
+    select.name = '';
+    custom.required = true;
+  } else {
+    custom.style.display = 'none';
+    custom.required = false;
+    custom.name = '';
+    select.name = 'couleur';
+  }
+}
+</script>
 @endsection 

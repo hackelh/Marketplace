@@ -1,4 +1,4 @@
-@extends('layouts.adminlte')
+@extends('layouts.sidebare')
 
 @section('title', 'Commandes validées')
 @section('breadcrumb')

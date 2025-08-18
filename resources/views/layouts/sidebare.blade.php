@@ -135,8 +135,8 @@
                   <p>Dashboard</p>
                 </a>
               </li>
-              <li class="nav-item {{ request()->routeIs(['vendeur.categories','vendeur.pays','vendeur.couleurs']) ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ request()->routeIs(['vendeur.categories','vendeur.pays','vendeur.couleurs']) ? 'active' : '' }}">
+              <li class="nav-item {{ request()->routeIs(['vendeur.categories','vendeur.pays']) ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ request()->routeIs(['vendeur.categories','vendeur.pays']) ? 'active' : '' }}">
                   <i class="fa-solid fa-list"></i>
                   <p>
                     Paramétrage
@@ -154,12 +154,6 @@
                     <a href="{{ route('vendeur.pays', false) ?? '#' }}" class="nav-link {{ request()->routeIs('vendeur.pays') ? 'active' : '' }}">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Pays d'Origine</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ route('vendeur.couleurs', false) ?? '#' }}" class="nav-link {{ request()->routeIs('vendeur.couleurs') ? 'active' : '' }}">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Couleur Tissu</p>
                     </a>
                   </li>
                 </ul>
@@ -263,6 +257,16 @@
     @if(config('app.debug'))
         @viteReactRefresh
     @endif
+    <!-- Bootstrap 5 bundle (required for tooltips/popovers if not included in AdminLTE build) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+      });
+    </script>
   </body>
   <!--end::Body-->
 </html>

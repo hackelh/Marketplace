@@ -209,6 +209,73 @@
             </div>
         </div>
     </div>
+
+    <!-- Commandes récentes -->
+    <div class="row g-4 mt-1">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">Commandes récentes</span>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('vendeur.commandes.en-cours') }}" class="btn btn-sm btn-outline-primary">En cours</a>
+                        <a href="{{ route('vendeur.commandes.valide') }}" class="btn btn-sm btn-outline-success">Validées</a>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Commande</th>
+                                    <th>Client</th>
+                                    <th>Montant</th>
+                                    <th>Statut</th>
+                                    <th>Créée le</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $dernieresCommandes = \App\Models\Commande::with('client')
+                                        ->where('vendeur_id', auth()->id())
+                                        ->latest()
+                                        ->limit(8)
+                                        ->get();
+                                @endphp
+                                @forelse($dernieresCommandes as $cmd)
+                                <tr>
+                                    <td>
+                                        <div class="fw-semibold">{{ $cmd->numero_commande }}</div>
+                                        <div class="text-muted small">{{ $cmd->details->count() }} article(s)</div>
+                                    </td>
+                                    <td>
+                                        <div class="fw-semibold">{{ $cmd->client->name ?? '-' }}</div>
+                                        <div class="text-muted small">{{ $cmd->client->email ?? '' }}</div>
+                                    </td>
+                                    <td>{{ number_format($cmd->montant_total, 0, ',', ' ') }} CFA</td>
+                                    <td>
+                                        <span class="badge bg-{{ $cmd->statut_couleur }}">{{ $cmd->statut_libelle }}</span>
+                                    </td>
+                                    <td>{{ $cmd->created_at->format('d/m/Y H:i') }}</td>
+                                    <td class="text-end">
+                                        <a href="{{ route('vendeur.commande.show', $cmd->id) }}" class="btn btn-sm btn-outline-secondary">Voir</a>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted py-4">
+                                        <i class="bi bi-inboxes"></i> Aucune commande trouvée
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <!-- Chart.js -->

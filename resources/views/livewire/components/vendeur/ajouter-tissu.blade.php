@@ -34,33 +34,45 @@
             <div class="px-6 py-4 border-b border-gray-200">
                 <h3 class="text-lg font-medium text-gray-900">Informations du Tissu</h3>
             </div>
-            
-            <form action="{{ route('vendeur.ajouter-tissu.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
-                @csrf
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
                     <!-- Nom du tissu -->
                     <div class="md:col-span-2">
                         <label for="nom" class="block text-sm font-medium text-gray-700 mb-2">Nom du tissu *</label>
-                        <input type="text" name="nom" id="nom" required
+                        <input type="text" name="nom" id="nom" required form="ajout-tissu-form"
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-                               placeholder="Ex: Tissu en coton">
+                               placeholder="Ex: Tissu en coton" value="{{ old('nom') }}">
                         @error('nom')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-
                     <!-- Description -->
                     <div class="md:col-span-2">
                         <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                        <textarea name="description" id="description" rows="3"
+                        <textarea name="description" id="description" rows="3" form="ajout-tissu-form"
                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-                                  placeholder="Description détaillée du tissu"></textarea>
+                                  placeholder="Description détaillée du tissu">{{ old('description') }}</textarea>
                         @error('description')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-
+            <form id="ajout-tissu-form" action="{{ route('vendeur.ajouter-tissu.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
+                @csrf
+                
+                <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
+                    <!-- Catégorie -->
+                    <div>
+                        <label for="categorie_id" class="block text-sm font-medium text-gray-700 mb-2">Catégorie *</label>
+                        <select name="categorie_id" id="categorie_id" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="">Sélectionnez une catégorie</option>
+                            @foreach(\App\Models\Categorie::all() as $categorie)
+                                <option value="{{ $categorie->id }}">{{ $categorie->nom }}</option>
+                            @endforeach
+                        </select>
+                        @error('categorie_id')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                     <!-- Prix -->
                     <div>
                         <label for="prix" class="block text-sm font-medium text-gray-700 mb-2">Prix (FCFA) *</label>
@@ -83,49 +95,16 @@
                         @enderror
                     </div>
 
-                    <!-- Couleur -->
+                    <!-- Origine (liste des pays) -->
                     <div>
-                        <label for="couleur" class="block text-sm font-medium text-gray-700 mb-2">Couleur *</label>
-                        <select name="couleur" id="couleur-select" required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-                                onchange="toggleCustomColor(this.value)">
-                            <option value="">Sélectionnez une couleur</option>
-                            <option value="Bleu">Bleu</option>
-                            <option value="Rouge">Rouge</option>
-                            <option value="Vert">Vert</option>
-                            <option value="Jaune">Jaune</option>
-                            <option value="Noir">Noir</option>
-                            <option value="Blanc">Blanc</option>
-                            <option value="Autre">Autre...</option>
-                        </select>
-                        <input type="text" name="couleur" id="custom-couleur" placeholder="Entrez une couleur personnalisée"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mt-2 hidden">
-                        @error('couleur')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Catégorie -->
-                    <div>
-                        <label for="categorie_id" class="block text-sm font-medium text-gray-700 mb-2">Catégorie *</label>
-                        <select name="categorie_id" id="categorie_id" required
+                        <label for="origine" class="block text-sm font-medium text-gray-700 mb-2">Origine (pays)</label>
+                        <select name="origine" id="origine"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                            <option value="">Sélectionnez une catégorie</option>
-                            @foreach(\App\Models\Categorie::all() as $categorie)
-                                <option value="{{ $categorie->id }}">{{ $categorie->nom }}</option>
+                            <option value="">Sélectionnez un pays</option>
+                            @foreach(\App\Models\Pays::orderBy('nom')->get() as $p)
+                                <option value="{{ $p->nom }}">{{ $p->nom }}</option>
                             @endforeach
                         </select>
-                        @error('categorie_id')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Origine -->
-                    <div>
-                        <label for="origine" class="block text-sm font-medium text-gray-700 mb-2">Origine</label>
-                        <input type="text" name="origine" id="origine"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-                               placeholder="Ex: Chine, Inde, France...">
                         @error('origine')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -187,3 +166,4 @@ function toggleCustomColor(val) {
     }
 }
 </script>
+

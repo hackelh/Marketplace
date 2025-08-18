@@ -150,18 +150,24 @@
                   <p>Catégories</p>
                 </a>
               </li>
+              {{-- Masqué pour Admin: Tissus --}}
+              {{-- 
               <li class="nav-item">
                 <a href="{{ route('admin.tissus', false) ?? '#' }}" class="nav-link {{ request()->routeIs('admin.tissus') ? 'active' : '' }}">
                   <i class="nav-icon bi bi-box"></i>
                   <p>Tissus</p>
                 </a>
               </li>
+              --}}
+              {{-- Masqué pour Admin: Commandes --}}
+              {{-- 
               <li class="nav-item">
                 <a href="{{ route('admin.commandes', false) ?? '#' }}" class="nav-link {{ request()->routeIs('admin.commandes') ? 'active' : '' }}">
                   <i class="nav-icon bi bi-bag"></i>
                   <p>Commandes</p>
                 </a>
               </li>
+              --}}
               <li class="nav-item">
                 <a href="{{ route('admin.statistiques', false) ?? '#' }}" class="nav-link {{ request()->routeIs('admin.statistiques') ? 'active' : '' }}">
                   <i class="nav-icon bi bi-graph-up"></i>

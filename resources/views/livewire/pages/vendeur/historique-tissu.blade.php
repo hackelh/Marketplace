@@ -1,4 +1,4 @@
-@extends('layouts.adminlte')
+@extends('layouts.sidebare')
 
 @section('title', 'Historique du Tissu')
 @section('breadcrumb')

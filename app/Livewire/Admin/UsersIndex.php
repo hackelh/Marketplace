@@ -22,8 +22,8 @@ class UsersIndex extends Component
     public string $name = '';
     #[Validate('required|email')]
     public string $email = '';
-    #[Validate('nullable|in:admin,vendeur,tailleur,client')]
-    public string $roleField = 'client';
+    // Conservé pour compat mais non modifiable par le CRUD (création toujours en admin)
+    public string $roleField = 'admin';
     #[Validate('nullable|min:6|same:password_confirmation')]
     public ?string $password = null;
     public ?string $password_confirmation = null;
@@ -48,6 +48,8 @@ class UsersIndex extends Component
     public function create(): void
     {
         $this->resetForm();
+        // Force le rôle à admin pour toute création
+        $this->roleField = 'admin';
         $this->showForm = true;
     }
 
@@ -57,7 +59,7 @@ class UsersIndex extends Component
         $this->editingId = $user->id;
         $this->name = $user->name;
         $this->email = $user->email;
-        $this->roleField = (string) ($user->role ?? 'client');
+        // Ne pas exposer/éditer le rôle via le formulaire
         $this->password = null;
         $this->password_confirmation = null;
         $this->showForm = true;
@@ -69,35 +71,33 @@ class UsersIndex extends Component
         abort_unless(auth()->user()?->isAdmin(), 403);
 
         if ($this->editingId) {
-            // Update
+            // Update sans modification de rôle
             $this->validate([
                 'name' => 'required|string|min:3',
                 'email' => 'required|email|unique:users,email,' . $this->editingId,
-                'roleField' => 'nullable|in:admin,vendeur,tailleur,client',
                 'password' => 'nullable|min:6|same:password_confirmation',
             ]);
 
             $user = User::findOrFail($this->editingId);
             $user->name = $this->name;
             $user->email = $this->email;
-            $user->role = $this->roleField ?: $user->role;
+            // $user->role reste inchangé
             if ($this->password) {
                 $user->password = Hash::make($this->password);
             }
             $user->save();
         } else {
-            // Create
+            // Create: toujours en admin
             $this->validate([
                 'name' => 'required|string|min:3',
                 'email' => 'required|email|unique:users,email',
-                'roleField' => 'nullable|in:admin,vendeur,tailleur,client',
                 'password' => 'required|min:6|same:password_confirmation',
             ]);
 
             User::create([
                 'name' => $this->name,
                 'email' => $this->email,
-                'role' => $this->roleField ?: 'client',
+                'role' => 'admin',
                 'password' => Hash::make($this->password),
             ]);
         }
@@ -110,7 +110,6 @@ class UsersIndex extends Component
 
     public function confirmDelete(int $id): void
     {
-        // Simple confirmation JS côté vue
         $this->dispatch('confirm-delete', id: $id);
     }
 
@@ -132,7 +131,7 @@ class UsersIndex extends Component
         $this->editingId = null;
         $this->name = '';
         $this->email = '';
-        $this->roleField = 'client';
+        $this->roleField = 'admin';
         $this->password = null;
         $this->password_confirmation = null;
     }

@@ -11,6 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (Schema::hasTable('tissus')) {
+            return;
+        }
         Schema::create('tissus', function (Blueprint $table) {
             $table->id();
             $table->string('nom'); // Nom du tissu
@@ -23,15 +26,16 @@ return new class extends Migration
             $table->string('composition')->nullable(); // Composition du tissu (100% coton, etc.)
             $table->boolean('disponible')->default(true); // Disponibilité
             
-            // Relations
-            $table->foreignId('categorie_id')->constrained('categories')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Vendeur
+            // Colonnes relationnelles (sans contraintes FK ici pour éviter les erreurs d'ordre)
+            $table->unsignedBigInteger('categorie_id');
+            $table->unsignedBigInteger('user_id'); // Vendeur
             
             $table->timestamps();
             
             // Index pour optimiser les recherches
             $table->index(['disponible', 'categorie_id']);
             $table->index(['prix']);
+            $table->index('user_id');
         });
     }
 

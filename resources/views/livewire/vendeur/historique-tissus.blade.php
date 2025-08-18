@@ -106,16 +106,17 @@
             <!--begin::Card-->
             <div class="card">
                 <!--begin::Card Header-->
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title mb-0">
+                <div class="card-header">
+                    <h3 class="card-title">
                         <i class="bi bi-clock-history me-2"></i>
                         Historique des Mouvements - {{ $tissu->nom }} ({{ $tissu->couleur }})
                     </h3>
                     <div class="card-tools d-flex gap-2 align-items-center">
-                        <span class="badge text-bg-primary">Stock actuel: {{ $tissu->stock }} mètres</span>
-                        @if($statistiques['dernier_mouvement'])
-                            <span class="badge text-bg-secondary">Dernière activité: {{ $statistiques['dernier_mouvement']->created_at->diffForHumans() }}</span>
-                        @endif
+                        <span class="badge text-bg-primary">Stock: {{ $tissu->stock }} m</span>
+                        <span class="badge text-bg-light text-dark">
+                            <i class="bi bi-clock-history me-1"></i>
+                            Dernière activité: {{ $lastActivityAt ?? '—' }}
+                        </span>
                     </div>
                 </div>
                 <!--end::Card Header-->
@@ -124,48 +125,59 @@
                 <div class="card-body">
                     @if($successMessage)
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <i class="bi bi-check-circle me-2"></i> {{ $successMessage }}
+                            <i class="bi bi-check-circle me-1"></i> {{ $successMessage }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
 
-                    <!--begin::Mouvement Form-->
+                    <!--begin::Movement Form-->
                     <form wire:submit.prevent="enregistrerMouvement" class="mb-4">
-                        <div class="row g-2 align-items-end">
-                            <div class="col-md-2">
-                                <label class="form-label">Action</label>
-                                <select class="form-select" wire:model="mouvementType">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-3">
+                                <label class="form-label">Type de mouvement</label>
+                                <select wire:model.live="mouvementType" class="form-select">
                                     <option value="ajout">Ajout</option>
                                     <option value="vente">Vente</option>
                                     <option value="ajustement">Ajustement</option>
                                 </select>
                             </div>
-                            <div class="col-md-2" @if($mouvementType!=='ajout' && $mouvementType!=='vente') style="display:none" @endif>
-                                <label class="form-label">Quantité (m)</label>
-                                <input type="number" min="1" class="form-control" wire:model.defer="quantite" placeholder="0">
-                                @error('quantite') <small class="text-danger">{{ $message }}</small> @enderror
+                            @if($mouvementType === 'ajustement')
+                                <div class="col-md-3">
+                                    <label class="form-label">Nouvelle quantité (m)</label>
+                                    <input type="number" min="0" wire:model.live="nouvelleQuantite" class="form-control" placeholder="Ex: 120">
+                                    @error('nouvelleQuantite') <small class="text-danger">{{ $message }}</small> @enderror
+                                </div>
+                            @else
+                                <div class="col-md-3">
+                                    <label class="form-label">Quantité (m)</label>
+                                    <input type="number" min="1" wire:model.live="quantite" class="form-control" placeholder="Ex: 10">
+                                    @error('quantite') <small class="text-danger">{{ $message }}</small> @enderror
+                                </div>
+                            @endif
+                            <div class="col-md-3">
+                                <label class="form-label">Motif</label>
+                                <input type="text" wire:model.live="motif" class="form-control" placeholder="Optionnel">
                             </div>
-                            <div class="col-md-2" @if($mouvementType!=='ajustement') style="display:none" @endif>
-                                <label class="form-label">Nouveau stock (m)</label>
-                                <input type="number" min="0" class="form-control" wire:model.defer="nouvelleQuantite" placeholder="0">
-                                @error('nouvelleQuantite') <small class="text-danger">{{ $message }}</small> @enderror
-                            </div>
-
-                            <div class="col-md-1 text-end">
-                                <button type="submit" class="btn btn-primary w-100">
-                                    <i class="bi bi-save"></i>
-                                </button>
-                            </div>
-                            <div class="col-12 mt-2">
+                            @if($mouvementType !== 'ajustement')
+                                <div class="col-md-3">
+                                    <label class="form-label">Référence</label>
+                                    <input type="text" wire:model.live="reference" class="form-control" placeholder="Bon/Facture (optionnel)">
+                                </div>
+                            @endif
+                            <div class="col-12 col-md-6">
                                 <label class="form-label">Notes</label>
-                                <textarea class="form-control" rows="2" wire:model.defer="notes" placeholder="Notes optionnelles..."></textarea>
+                                <input type="text" wire:model.live="notes" class="form-control" placeholder="Détails (optionnel)">
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="bi bi-save me-1"></i> Enregistrer
+                                </button>
                             </div>
                         </div>
                     </form>
-                    <!--end::Mouvement Form-->
-
+                    <!--end::Movement Form-->
                     <!--begin::Filters-->
-                    <div class="row mb-3">
+                    <div class="row mb-3 g-3">
                         <div class="col-md-3">
                             <label class="form-label">Type de mouvement</label>
                             <select wire:model.live="typeFilter" class="form-select">
@@ -185,10 +197,9 @@
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">&nbsp;</label>
-                            <button wire:click="$set('typeFilter', '')" 
-                                    wire:click="$set('dateDebut', '')" 
-                                    wire:click="$set('dateFin', '')"
-                                    class="btn btn-secondary w-100">
+                            <button 
+                                wire:click="$set('typeFilter',''); $set('dateDebut',''); $set('dateFin','')"
+                                class="btn btn-secondary w-100">
                                 <i class="bi bi-arrow-clockwise"></i> Réinitialiser
                             </button>
                         </div>
@@ -198,15 +209,15 @@
                     <!--begin::Table-->
                     @if($historique->count() > 0)
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped">
-                                <thead>
+                            <table class="table table-bordered table-striped align-middle">
+                                <thead class="table-light">
                                     <tr>
                                         <th>Date</th>
                                         <th>Type</th>
                                         <th>Mouvement</th>
                                         <th>Stock</th>
                                         <th>Utilisateur</th>
-
+                                        <th>Détails</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -240,7 +251,14 @@
                                                 <i class="bi bi-person me-1"></i>
                                                 {{ $mouvement->utilisateur->name }}
                                             </td>
-
+                                            <td>
+                                                @if($mouvement->notes)
+                                                    <small class="text-muted">{{ \Illuminate\Support\Str::limit($mouvement->notes, 50) }}</small>
+                                                @endif
+                                                @if($mouvement->reference)
+                                                    <br><small class="text-info">Ref: {{ $mouvement->reference }}</small>
+                                                @endif
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -249,7 +267,7 @@
                         
                         <!--begin::Pagination-->
                         <div class="d-flex justify-content-center mt-3">
-                            {{ $historique->links() }}
+                            {{ $historique->links('pagination::bootstrap-5') }}
                         </div>
                         <!--end::Pagination-->
                     @else

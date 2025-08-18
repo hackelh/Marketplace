@@ -1,60 +1,65 @@
 <div>
     <!-- En-tête avec statistiques -->
-    <div class="bg-white shadow-sm border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div class="flex items-center justify-between mb-6">
+    <div class="bg-white shadow-sm border-bottom">
+        <div class="container-fluid py-4">
+            <div class="d-flex align-items-center justify-content-between mb-3">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">Commandes Validées</h1>
-                    <p class="text-gray-600">Historique de vos commandes livrées et terminées</p>
+                    <h1 class="h3 fw-bold mb-1">Commandes Validées</h1>
+                    <div class="text-muted">Historique de vos commandes livrées et terminées</div>
                 </div>
             </div>
 
-            <!-- Statistiques -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div class="bg-green-50 rounded-lg p-4">
-                    <div class="flex items-center">
-                        <div class="bg-green-100 rounded-full p-2">
-                            <i class="bi bi-check-circle text-green-600"></i>
-                        </div>
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-green-600">Total validées</p>
-                            <p class="text-lg font-semibold text-green-900">{{ $statistiques['total_validees'] }}</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-blue-50 rounded-lg p-4">
-                    <div class="flex items-center">
-                        <div class="bg-blue-100 rounded-full p-2">
-                            <i class="bi bi-truck text-blue-600"></i>
-                        </div>
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-blue-600">Livrées</p>
-                            <p class="text-lg font-semibold text-blue-900">{{ $statistiques['livrees'] }}</p>
+            <!-- Statistiques - style Dashboard (Bootstrap/AdminLTE cards) -->
+            <div class="row g-4 mb-2">
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="bg-success bg-opacity-10 rounded-circle p-3 me-3">
+                                <i class="bi bi-check-circle fs-3 text-success"></i>
+                            </div>
+                            <div>
+                                <div class="fs-5 fw-bold">{{ $statistiques['total_validees'] }}</div>
+                                <div class="text-muted">Total validées</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="bg-purple-50 rounded-lg p-4">
-                    <div class="flex items-center">
-                        <div class="bg-purple-100 rounded-full p-2">
-                            <i class="bi bi-flag-checkered text-purple-600"></i>
-                        </div>
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-purple-600">Terminées</p>
-                            <p class="text-lg font-semibold text-purple-900">{{ $statistiques['terminees'] }}</p>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3">
+                                <i class="bi bi-truck fs-3 text-primary"></i>
+                            </div>
+                            <div>
+                                <div class="fs-5 fw-bold">{{ $statistiques['livrees'] }}</div>
+                                <div class="text-muted">Livrées</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="bg-yellow-50 rounded-lg p-4">
-                    <div class="flex items-center">
-                        <div class="bg-yellow-100 rounded-full p-2">
-                            <i class="bi bi-currency-dollar text-yellow-600"></i>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="bg-purple bg-opacity-10 rounded-circle p-3 me-3" style="background-color: rgba(111, 66, 193, 0.1) !important;">
+                                <i class="bi bi-flag-checkered fs-3" style="color: #6f42c1;"></i>
+                            </div>
+                            <div>
+                                <div class="fs-5 fw-bold">{{ $statistiques['terminees'] }}</div>
+                                <div class="text-muted">Terminées</div>
+                            </div>
                         </div>
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-yellow-600">Montant total</p>
-                            <p class="text-lg font-semibold text-yellow-900">{{ number_format($statistiques['montant_total'], 0, ',', ' ') }} CFA</p>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="bg-warning bg-opacity-10 rounded-circle p-3 me-3">
+                                <i class="bi bi-currency-dollar fs-3 text-warning"></i>
+                            </div>
+                            <div>
+                                <div class="fs-5 fw-bold">{{ number_format($statistiques['montant_total'], 0, ',', ' ') }} CFA</div>
+                                <div class="text-muted">Montant total</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -162,12 +167,10 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <div class="flex space-x-2">
-                                            <button class="text-indigo-600 hover:text-indigo-900">
-                                                Voir détails
-                                            </button>
-                                            <button class="text-green-600 hover:text-green-900">
-                                                Facture
-                                            </button>
+                                            <a href="{{ route('vendeur.commande.show', $commande->id) }}" class="text-indigo-600 hover:text-indigo-900">Voir détails</a>
+                                             <button class="text-green-600 hover:text-green-900">
+                                                 Facture
+                                             </button>
                                         </div>
                                     </td>
                                 </tr>
