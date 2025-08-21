@@ -12,7 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Alias middleware applicatif
+        $middleware->alias([
+            'not_blocked' => \App\Http\Middleware\EnsureUserNotBlocked::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

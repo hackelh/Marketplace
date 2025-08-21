@@ -161,22 +161,5 @@
     </div>
 </div>
 
-<script>
-function toggleCustomColorEdit(val){
-  const preset = ['Bleu','Rouge','Vert','Jaune','Noir','Blanc'];
-  const select = document.getElementById('couleur-select');
-  const custom = document.getElementById('custom-couleur');
-  if(val === 'Autre'){
-    custom.style.display = '';
-    custom.name = 'couleur';
-    select.name = '';
-    custom.required = true;
-  } else {
-    custom.style.display = 'none';
-    custom.required = false;
-    custom.name = '';
-    select.name = 'couleur';
-  }
-}
-</script>
+{{-- Couleur supprimée: JS retiré --}}
 @endsection 

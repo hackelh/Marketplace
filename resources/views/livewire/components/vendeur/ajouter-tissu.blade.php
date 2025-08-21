@@ -149,21 +149,4 @@
     </div>
 </div>
 
-<script>
-function toggleCustomColor(val) {
-    const custom = document.getElementById('custom-couleur');
-    if (val === 'Autre') {
-        custom.classList.remove('hidden');
-        custom.required = true;
-        custom.name = 'couleur';
-        document.getElementById('couleur-select').name = '';
-    } else {
-        custom.classList.add('hidden');
-        custom.required = false;
-        custom.value = '';
-        custom.name = '';
-        document.getElementById('couleur-select').name = 'couleur';
-    }
-}
-</script>
-
+{{-- Couleur supprimée: JS retiré --}}

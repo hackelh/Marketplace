@@ -101,8 +101,7 @@ class GestionTissus extends Component
             $s = '%' . $this->search . '%';
             $query->where(function ($q) use ($s) {
                 $q->where('nom', 'like', $s)
-                  ->orWhere('description', 'like', $s)
-                  ->orWhere('couleur', 'like', $s);
+                  ->orWhere('description', 'like', $s);
             });
         }
 

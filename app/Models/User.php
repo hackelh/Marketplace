@@ -30,6 +30,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'is_blocked',
     ];
 
     /**
@@ -63,6 +64,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_blocked' => 'boolean',
         ];
     }
 
@@ -87,5 +89,10 @@ class User extends Authenticatable
     public function isClient(): bool
     {
         return $this->role === 'client';
+    }
+
+    public function isBlocked(): bool
+    {
+        return (bool) ($this->is_blocked ?? false);
     }
 }

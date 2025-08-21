@@ -126,6 +126,30 @@ class UsersIndex extends Component
         $this->resetPage();
     }
 
+    public function block(int $id): void
+    {
+        abort_unless(auth()->user()?->isAdmin(), 403);
+        if (auth()->id() === $id) {
+            $this->dispatch('notify', type: 'warning', message: 'Action refusée: vous ne pouvez pas vous bloquer.');
+            return;
+        }
+        $user = User::findOrFail($id);
+        $user->is_blocked = true;
+        $user->save();
+        $this->dispatch('notify', type: 'success', message: 'Utilisateur bloqué');
+        $this->resetPage();
+    }
+
+    public function unblock(int $id): void
+    {
+        abort_unless(auth()->user()?->isAdmin(), 403);
+        $user = User::findOrFail($id);
+        $user->is_blocked = false;
+        $user->save();
+        $this->dispatch('notify', type: 'success', message: 'Utilisateur débloqué');
+        $this->resetPage();
+    }
+
     public function resetForm(): void
     {
         $this->editingId = null;

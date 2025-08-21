@@ -2,7 +2,7 @@
   <div class="card mb-3">
     <div class="card-header d-flex flex-column flex-md-row gap-2 align-items-md-center justify-content-between">
       <div class="d-flex gap-2 flex-wrap">
-        <input type="text" class="form-control" style="min-width:240px" placeholder="Rechercher (nom, couleur, description)" wire:model.live.debounce.300ms="search">
+        <input type="text" class="form-control" style="min-width:240px" placeholder="Rechercher (nom, description)" wire:model.live.debounce.300ms="search">
         <select class="form-select" wire:model.live="categorie">
           <option value="">Toutes catégories</option>
           @foreach($categories as $cat)
@@ -29,7 +29,6 @@
               <th>Nom</th>
               <th style="width:120px">Prix</th>
               <th style="width:110px">Stock</th>
-              <th>Couleur</th>
               <th>Catégorie</th>
               <th>Vendeur</th>
               <th style="width:120px">Dispo</th>
@@ -42,7 +41,6 @@
                 <td class="fw-semibold">{{ $t->nom }}</td>
                 <td>{{ number_format((float)$t->prix, 2, ',', ' ') }} FCFA</td>
                 <td>{{ $t->stock }}</td>
-                <td>{{ $t->couleur ?? '-' }}</td>
                 <td>{{ $t->categorie?->name ?? '-' }}</td>
                 <td>{{ $t->vendeur?->name ?? '-' }}</td>
                 <td>
@@ -52,7 +50,7 @@
               </tr>
             @empty
               <tr>
-                <td colspan="8" class="text-center py-4">Aucun tissu trouvé.</td>
+                <td colspan="7" class="text-center py-4">Aucun tissu trouvé.</td>
               </tr>
             @endforelse
           </tbody>

@@ -20,7 +20,6 @@ class Tissu extends Model
         'nom',
         'description',
         'prix',
-        'couleur',
         'image',
         'stock',
         'origine',
@@ -77,14 +76,6 @@ class Tissu extends Model
     public function scopeParCategorie(Builder $query, $categorieId): Builder
     {
         return $query->where('categorie_id', $categorieId);
-    }
-
-    /**
-     * Scope pour filtrer par couleur
-     */
-    public function scopeParCouleur(Builder $query, $couleur): Builder
-    {
-        return $query->where('couleur', 'like', '%' . $couleur . '%');
     }
 
     /**

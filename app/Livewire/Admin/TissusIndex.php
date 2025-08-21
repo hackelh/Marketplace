@@ -55,7 +55,6 @@ class TissusIndex extends Component
             $term = "%{$this->search}%";
             $q->where(function ($s) use ($term) {
                 $s->where('nom', 'like', $term)
-                  ->orWhere('couleur', 'like', $term)
                   ->orWhere('description', 'like', $term);
             });
         }

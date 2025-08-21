@@ -217,6 +217,7 @@
         <!--begin::Content-->
         <div class="content">
           <div class="container-fluid">
+            @includeIf('components.alerts')
             @yield('content')
           </div>
         </div>

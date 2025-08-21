@@ -10,6 +10,7 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    'not_blocked',
 ])->group(function () {
 
 
@@ -108,7 +109,7 @@ Route::middleware([
             'description' => 'nullable|string',
             'prix' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'couleur' => 'required|string|max:255',
+            'couleur' => 'nullable|string|max:255',
             'categorie_id' => 'required|exists:categories,id',
             'origine' => 'nullable|string|max:255',
             'composition' => 'nullable|string|max:255',
@@ -283,7 +284,7 @@ Route::middleware([
             'description' => 'nullable|string',
             'prix' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'couleur' => 'required|string|max:255',
+            'couleur' => 'nullable|string|max:255',
             'categorie_id' => 'required|exists:categories,id',
             'origine' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',

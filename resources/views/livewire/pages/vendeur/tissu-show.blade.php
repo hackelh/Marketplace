@@ -55,8 +55,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Couleur :</strong></td>
-                                            <td>{{ $tissu->couleur }}</td>
+                                            {{-- Couleur supprimée --}}
                                         </tr>
                                         <tr>
                                             <td><strong>Catégorie :</strong></td>

@@ -69,9 +69,9 @@
             <tr>
               <th>Nom</th>
               <th>Email</th>
-              <th style="width:140px">Rôle</th>
+              <th style="width:220px">Rôle / Statut</th>
               <th style="width:170px">Créé le</th>
-              <th style="width:150px">Actions</th>
+              <th style="width:220px">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -80,7 +80,14 @@
                 <td class="fw-semibold">{{ $u->name }}</td>
                 <td>{{ $u->email }}</td>
                 <td>
-                  <span class="badge text-bg-secondary">{{ $u->role ?? 'client' }}</span>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="badge text-bg-secondary">{{ $u->role ?? 'client' }}</span>
+                    @if($u->is_blocked)
+                      <span class="badge text-bg-danger">Bloqué</span>
+                    @else
+                      <span class="badge text-bg-success">Actif</span>
+                    @endif
+                  </div>
                 </td>
                 <td>{{ $u->created_at?->format('d/m/Y H:i') }}</td>
                 <td>
@@ -91,6 +98,15 @@
                     <button class="btn btn-outline-danger" onclick="window.dispatchEvent(new CustomEvent('confirm-delete', { detail: { id: {{ $u->id }} } }))">
                       <i class="bi bi-trash"></i>
                     </button>
+                    @if(!$u->is_blocked)
+                      <button class="btn btn-outline-warning" wire:click="block({{ $u->id }})" title="Bloquer">
+                        <i class="bi bi-slash-circle"></i>
+                      </button>
+                    @else
+                      <button class="btn btn-outline-success" wire:click="unblock({{ $u->id }})" title="Débloquer">
+                        <i class="bi bi-unlock"></i>
+                      </button>
+                    @endif
                   </div>
                 </td>
               </tr>
